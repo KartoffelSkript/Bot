@@ -1,5 +1,4 @@
-module.exports = {
-    hilfe: function(msg, args, client){
+module.exports = (msg, args, client) => {
         let contents = []
         client.commands.forEach((e, k) => {
             contents.push([k, client.prefix + k])
@@ -9,4 +8,3 @@ module.exports = {
         contents,
          "0xffaa00")
     }
-}

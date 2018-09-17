@@ -1,16 +1,29 @@
-const Discord = require("discord.js")
-const {Client} = Discord
+const Discord = require("discord.js");
+const fs = require("fs");
 
+class kartoffel extends Discord.Client {
 
-var client = new Client()
-client.prefix = "k!"
-client.embed = require("./embed.js")
+    constructor(prefix) {
+        this.prefix = prefix;
+        this.embed = require("./embed")
+        this.commands = new Map();
+        this.laden();
+    }
 
-client.commands = new Map()
+    laden() {
+        let commandList = fs.readdirSync('./commands/');
+        for (i = 0; i < commandList.length; i++) {
+            let item = commandList[i];
+            if (item.match(/\.js$/)) {
+                delete require.cache[require.resolve(`./commands/${item}`)];
+                this.commands.set(item.slice(0, -3), require(`./commands/${item}`));
+            }
+        }
+    }
 
-client.commands.set("hilfe", require("./commands/hilfe.js"))
-client.commands.set("sage", require("./commands/sage.js"))
+}
 
+const client = new kartoffel("k!")
 
 client.on("ready", () => {
     console.log(`${client.user.username} ist online!`)

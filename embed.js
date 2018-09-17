@@ -1,5 +1,4 @@
-const Discord = require("discord.js")
-const {RichEmbed} = Discord
+const { RichEmbed } = require("discord.js");
 
 module.exports = {
     uni: function(msg, title, desc, contents, color){
