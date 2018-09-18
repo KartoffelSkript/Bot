@@ -1,3 +1,9 @@
 {
-    "token":"TOKEN HERE"
+    "bot": {
+        "token": "xx"
+    },
+    "eval_whitelist": [
+        "264048760580079616",
+        "224084384054116352"
+    ]
 }

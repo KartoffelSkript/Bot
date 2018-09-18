@@ -1,7 +1,6 @@
 # TODOS
 
 ## Commands
-* **Eval Command**
 
 ## Features
 

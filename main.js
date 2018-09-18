@@ -11,7 +11,7 @@ class kartoffel extends Discord.Client {
         this.embed = require("./embed")
         this.commands = new Map();
         load();
-        this.login(config.token)
+        this.login(config.bot.token)
     }
 
 }
