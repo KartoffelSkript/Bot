@@ -1,5 +1,7 @@
 # Ignoriere module
 node-modules/
+./node_modules/
+node_modules
 
 # Ignoriere Config
 config.json

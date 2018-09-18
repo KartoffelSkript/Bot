@@ -1,24 +1,17 @@
 const Discord = require("discord.js");
-const fs = require("fs");
+const { resolve, basename } = require('path');
+const fs = require('fs');
+const config = require("./config.json")
 
 class kartoffel extends Discord.Client {
 
-    constructor(prefix) {
+    constructor(prefix, options={}) {
+        super(options);
         this.prefix = prefix;
         this.embed = require("./embed")
         this.commands = new Map();
-        this.laden();
-    }
-
-    laden() {
-        let commandList = fs.readdirSync('./commands/');
-        for (i = 0; i < commandList.length; i++) {
-            let item = commandList[i];
-            if (item.match(/\.js$/)) {
-                delete require.cache[require.resolve(`./commands/${item}`)];
-                this.commands.set(item.slice(0, -3), require(`./commands/${item}`));
-            }
-        }
+        load();
+        this.login(config.token)
     }
 
 }
@@ -43,6 +36,25 @@ client.on("message", msg => {
             client.commands.get(invoke)[invoke](msg, args, client)
         }
     }
-})
+});
 
-client.login("")
+
+async function getFiles(dir) {
+    const subdirs = await fs.readdirSync(dir);
+    const files = await Promise.all(subdirs.map(async (subdir) => {
+      const res = resolve(dir, subdir);
+      return (await fs.statSync(res)).isDirectory() ? getFiles(res) : res;
+    }));
+    return files.reduce((a, f) => a.concat(f), []);
+}
+
+async function load() {
+    let commandList = await getFiles("commands")
+    for (i = 0; i < commandList.length; i++) {
+        let item = commandList[i];
+        if (item.match(/\.js$/)) {
+            delete require.cache[require.resolve(`${item}`)];
+            client.commands.set(basename(item).slice(0, -3), require(`${item}`));
+        }
+    }
+}  
