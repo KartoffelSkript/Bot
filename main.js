@@ -32,8 +32,8 @@ client.on("message", msg => {
         let invoke = msg.content.substr(client.prefix.length).split(" ")[0].toLowerCase()
         let args = msg.content.substr(client.prefix.length + invoke.length).split(" ")
 
-        if(client.commands.get(invoke)){
-            client.commands.get(invoke)[invoke](msg, args, client)
+        if(client.commands.get(invoke)) {
+            client.commands.get(invoke)(msg, args, client)
         }
     }
 });
@@ -58,3 +58,4 @@ async function load() {
         }
     }
 }  
+
