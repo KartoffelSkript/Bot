@@ -57,5 +57,6 @@ async function load() {
             client.commands.set(basename(item).slice(0, -3), require(`${item}`));
         }
     }
+    console.log(client.commands)
 }  
 

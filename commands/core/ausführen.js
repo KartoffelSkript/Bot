@@ -1,4 +1,4 @@
-const whitelist = require('../config').eval_whitelist;
+const whitelist = require('../../config').eval_whitelist;
 
 module.exports = (msg, args, client) => {
     if (!whitelist.includes(msg.author.id)) {
