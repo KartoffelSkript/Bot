@@ -18,11 +18,6 @@ class kartoffel extends Discord.Client {
 
 const client = new kartoffel("k!")
 
-client.on("ready", () => {
-    console.log(`${client.user.username} ist online!`)
-    client.user.setPresence({status: "online", game:{name: "mit Kartoffeln"}})
-})
-
 async function getFiles(dir) {
     const subdirs = await fs.readdirSync(dir);
     const files = await Promise.all(subdirs.map(async (subdir) => {
