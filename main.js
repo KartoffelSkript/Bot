@@ -10,6 +10,7 @@ class kartoffel extends Discord.Client {
         this.prefix = prefix;
         this.embed = require("./embed")
         this.commands = new Map();
+        this.categories = new Map();
         load();
         this.login(config.bot.token)
     }
@@ -29,11 +30,19 @@ async function getFiles(dir) {
 
 async function load() {
     let commandList = await getFiles("commands")
+    let commandCateg = await fs.readdirSync("commands")
     for (i = 0; i < commandList.length; i++) {
         let item = commandList[i];
+        commandCateg.forEach(categ => {
+            if(!client.categories.get(categ)) client.categories.set(categ, categ)
+        })
         if (item.match(/\.js$/)) {
             delete require.cache[require.resolve(`${item}`)];
-            client.commands.set(basename(item).slice(0, -3), require(`${item}`));
+            var commandcategory
+            commandCateg.forEach(categ => {
+                if(item.includes(categ)) commandcategory = categ
+            })
+            client.commands.set(basename(item).slice(0, -3), [require(`${item}`), commandcategory]);
         }
     }
     fs.readdir("./events/", (err, files) => {
