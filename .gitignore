@@ -4,3 +4,7 @@ node-modules/
 node_modules
 # Ignoriere Config
 config.json
+# Ignoriere idea Ordner
+.idea
+.idea/
+./.idea/
