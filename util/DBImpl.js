@@ -1,3 +1,1 @@
-class DBImpl {
-
-}
+const Sequelize = require("sequelize");
