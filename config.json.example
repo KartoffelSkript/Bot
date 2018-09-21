@@ -7,7 +7,7 @@
 		"database": "database",
 		"username": "username",
 		"password": "password",
-		"host": "host",
+		"host": "host"
 	},
     "eval_whitelist": [
         "264048760580079616",
