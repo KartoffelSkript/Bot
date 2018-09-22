@@ -11,7 +11,7 @@ class kartoffel extends Discord.Client {
         this.embed = require("./embed");
         this.commands = new Map();
         load();
-        this.login(config.bot.token)
+        this.login(config.bot.token);
     }
 
 }
@@ -47,6 +47,6 @@ async function load() {
             delete require.cache[require.resolve(`./events/${file}`)];
     });
   });
-    console.log(client.commands)
+    console.log(client.commands);
 }  
 
