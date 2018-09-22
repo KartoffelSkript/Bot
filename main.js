@@ -12,6 +12,7 @@ class kartoffel extends Discord.Client {
         this.commands = new Map();
         load();
         this.login(config.bot.token);
+        DBInit();
     }
 
 }
@@ -48,5 +49,13 @@ async function load() {
     });
   });
     console.log(client.commands);
-}  
+}
+// Spin up Sequelize and connect to MySQL
+// Author: InterXellar (Filip M.)
+function DBInit() {
+    let db = require('./util/DBImpl');
+    db.SequelizeInit();
+}
+
+
 
