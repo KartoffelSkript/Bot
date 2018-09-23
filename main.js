@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const { resolve, basename } = require('path');
 const fs = require('fs');
-const config = require("./config.json");
+const config = require("./config.json")
+const startTime = Date.now()
 
 class kartoffel extends Discord.Client {
 
@@ -68,3 +69,6 @@ function DBInit() {
 
 
 
+exports.startUpTime = function() {
+    return this.startTime
+}
