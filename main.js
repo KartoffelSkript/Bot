@@ -2,42 +2,24 @@ const Discord = require("discord.js");
 const { resolve, basename } = require('path');
 const fs = require('fs');
 const config = require("./config.json")
+const startTime = Date.now()
 
 class kartoffel extends Discord.Client {
 
     constructor(prefix, options={}) {
         super(options);
         this.prefix = prefix;
-        this.embed = require("./embed")
+        this.embed = require("./embed");
         this.commands = new Map();
+        this.categories = new Map();
         load();
-        this.login(config.bot.token)
+        this.login(config.bot.token);
+        DBInit();
     }
 
 }
 
-const client = new kartoffel("k!")
-
-client.on("ready", () => {
-    console.log(`${client.user.username} ist online!`)
-    client.user.setPresence({status: "online", game:{name: "mit Kartoffeln"}})
-})
-
-client.on("message", msg => {
-    if(msg.content == `<@${client.user.id}>`){
-        msg.channel.send(client.emojis.get('491271120595582978') + " ")
-    }
-
-    if(msg.content.startsWith(client.prefix)){
-        let invoke = msg.content.substr(client.prefix.length).split(" ")[0].toLowerCase()
-        let args = msg.content.substr(client.prefix.length + invoke.length).split(" ")
-
-        if(client.commands.get(invoke)) {
-            client.commands.get(invoke)(msg, args, client)
-        }
-    }
-});
-
+const client = new kartoffel(config.bot.prefix);
 
 async function getFiles(dir) {
     const subdirs = await fs.readdirSync(dir);
@@ -50,13 +32,43 @@ async function getFiles(dir) {
 
 async function load() {
     let commandList = await getFiles("commands")
+    let commandCateg = await fs.readdirSync("commands")
+
     for (i = 0; i < commandList.length; i++) {
         let item = commandList[i];
+        commandCateg.forEach(categ => {
+            if(!client.categories.get(categ)) client.categories.set(categ, categ)
+        })
         if (item.match(/\.js$/)) {
             delete require.cache[require.resolve(`${item}`)];
-            client.commands.set(basename(item).slice(0, -3), require(`${item}`));
+            var commandcategory
+            commandCateg.forEach(categ => {
+                if(item.includes(categ)) commandcategory = categ
+            })
+            client.commands.set(basename(item).slice(0, -3), [require(`${item}`), commandcategory]);
         }
     }
-    console.log(client.commands)
-}  
+    fs.readdir("./events/", (err, files) => {
+        if (err) return console.error(err);
+        files.forEach(file => {
+            if (!file.endsWith(".js")) return;
+            const event = require(`./events/${file}`);
+            let eventName = file.split(".")[0];
+            client.on(eventName, event.bind(null, client));
+            delete require.cache[require.resolve(`./events/${file}`)];
+    });
+  });
+    console.log(client.commands);
+}
+// Spin up Sequelize and connect to MySQL
+// Author: InterXellar (Filip M.)
+function DBInit() {
+    let db = require('./util/DBImpl');
+    db.SequelizeInit();
+}
 
+
+
+exports.startUpTime = function() {
+    return this.startTime
+}
