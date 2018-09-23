@@ -1,22 +1,23 @@
 const Discord = require("discord.js");
 const { resolve, basename } = require('path');
 const fs = require('fs');
-const config = require("./config.json")
+const config = require("./config.json");
 
 class kartoffel extends Discord.Client {
 
     constructor(prefix, options={}) {
         super(options);
         this.prefix = prefix;
-        this.embed = require("./embed")
+        this.embed = require("./embed");
         this.commands = new Map();
         load();
-        this.login(config.bot.token)
+        this.login(config.bot.token);
+        DBInit();
     }
 
 }
 
-const client = new kartoffel("k!")
+const client = new kartoffel(config.bot.prefix);
 
 async function getFiles(dir) {
     const subdirs = await fs.readdirSync(dir);
@@ -28,7 +29,8 @@ async function getFiles(dir) {
 }
 
 async function load() {
-    let commandList = await getFiles("commands")
+    let commandList;
+    commandList = await getFiles("commands");
     for (i = 0; i < commandList.length; i++) {
         let item = commandList[i];
         if (item.match(/\.js$/)) {
@@ -46,6 +48,14 @@ async function load() {
             delete require.cache[require.resolve(`./events/${file}`)];
     });
   });
-    console.log(client.commands)
-}  
+    console.log(client.commands);
+}
+// Spin up Sequelize and connect to MySQL
+// Author: InterXellar (Filip M.)
+function DBInit() {
+    let db = require('./util/DBImpl');
+    db.SequelizeInit();
+}
+
+
 
