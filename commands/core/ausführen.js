@@ -1,6 +1,6 @@
 const whitelist = require('../../config').eval_whitelist;
 
-module.exports = (msg, args, client) => {
+module.exports.run = (msg, args, client) => {
     if (!whitelist.includes(msg.author.id)) {
         return msg.channel.send(':no_entry_sign: Du hast leider keine Berechtigung für diesen Befehl.')
     }
@@ -17,3 +17,8 @@ module.exports = (msg, args, client) => {
     
 }
 
+module.exports.info = {
+    beschreibung: "Ausführen",
+    level: 999,
+    enabled: true
+}
