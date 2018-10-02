@@ -1,7 +1,14 @@
 {
     "bot": {
-        "token": "xx"
+        "token": "xx",
+		"prefix": "prefix"
     },
+	"db": {
+		"database": "database",
+		"username": "username",
+		"password": "password",
+		"host": "host"
+	},
     "eval_whitelist": [
         "264048760580079616",
         "224084384054116352"
